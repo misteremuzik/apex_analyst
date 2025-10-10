@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Send, User, ExternalLink, Loader2 } from 'lucide-react';
+import { marked } from 'marked';
 
 interface Message {
   id: string;
@@ -117,7 +118,14 @@ export function ChatAssistant({ analysisId }: ChatAssistantProps) {
                     : 'bg-white border border-gray-200 text-gray-900'
                 }`}
               >
-                <p className="text-sm whitespace-pre-line leading-relaxed">{message.content}</p>
+                {message.role === 'user' ? (
+                  <p className="text-sm whitespace-pre-line leading-relaxed">{message.content}</p>
+                ) : (
+                  <div
+                    className="text-sm leading-relaxed prose prose-sm max-w-none prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0 prose-headings:my-2 prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-gray-800 prose-pre:bg-gray-100 prose-pre:text-gray-800"
+                    dangerouslySetInnerHTML={{ __html: marked(message.content) }}
+                  />
+                )}
               </div>
 
               {message.sources && message.sources.length > 0 && (
