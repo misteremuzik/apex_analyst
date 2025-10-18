@@ -224,29 +224,6 @@ Deno.serve(async (req: Request) => {
   } catch (error) {
     console.error("Error sending emails:", error);
 
-    // Try to update the lead with error info
-    if (error instanceof Error) {
-      try {
-        const { leadId } = await req.json();
-        if (leadId) {
-          const supabase = createClient(
-            Deno.env.get("SUPABASE_URL")!,
-            Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-          );
-
-          await supabase
-            .from("consultation_leads")
-            .update({
-              email_sent: false,
-              email_error: error.message,
-            })
-            .eq("id", leadId);
-        }
-      } catch (updateErr) {
-        console.error("Failed to update error status:", updateErr);
-      }
-    }
-
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Failed to send emails"
