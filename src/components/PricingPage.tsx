@@ -7,7 +7,7 @@ const PRICING_TIERS = [
   {
     name: 'Free',
     price: '$0',
-    priceId: 'price_1SJi75F0amqk11yXGNoLcM20',
+    priceId: 'price_1SJjamF0amqk11yXTJS9dbRB',
     tier: 'free',
     description: 'Perfect for trying out AI optimization',
     features: [
@@ -23,7 +23,7 @@ const PRICING_TIERS = [
   {
     name: 'Starter',
     price: '$9.99',
-    priceId: 'price_1SJi75F0amqk11yXSOn5cDix',
+    priceId: 'price_1SJjbSF0amqk11yXcrXv8Jrd',
     tier: 'starter',
     description: 'Great for small businesses and freelancers',
     features: [
@@ -39,7 +39,7 @@ const PRICING_TIERS = [
   {
     name: 'Professional',
     price: '$29.99',
-    priceId: 'price_1SJi75F0amqk11yXujtWvAdb',
+    priceId: 'price_1SJjbvF0amqk11yXBfgGEnCj',
     tier: 'professional',
     description: 'For professionals who need full access',
     features: [
@@ -56,7 +56,7 @@ const PRICING_TIERS = [
   {
     name: 'Business',
     price: '$79.99',
-    priceId: 'price_1SJi75F0amqk11yXxqUSvWF2',
+    priceId: 'price_1SJjcTF0amqk11yXTzeAEAX6',
     tier: 'business',
     description: 'Advanced features for growing teams',
     features: [
@@ -73,7 +73,7 @@ const PRICING_TIERS = [
   {
     name: 'Enterprise',
     price: '$199.99',
-    priceId: 'price_1SJi75F0amqk11yX0StLCD0F',
+    priceId: 'price_1SJjczF0amqk11yXCpwWPEFQ',
     tier: 'enterprise',
     description: 'Custom solutions for large organizations',
     features: [
