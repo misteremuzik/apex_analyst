@@ -68,7 +68,9 @@ export function PerformanceMetrics({
     return 'Poor';
   };
 
-  if (!metrics && !isAnalyzing) {
+  const hasValidMetrics = metrics && metrics.categories && metrics.lcp && metrics.fcp && metrics.cls;
+
+  if (!hasValidMetrics && !isAnalyzing) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-8">
         <div className="flex items-start gap-4 mb-6">
