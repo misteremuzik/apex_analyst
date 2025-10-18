@@ -88,24 +88,24 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-cyan-50 py-12 px-4">
+    <div className="min-h-screen bg-white py-12 px-4">
       <div className="container mx-auto">
         {!analysis ? (
           <div className="flex flex-col items-center justify-center min-h-[70vh]">
             <UrlInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
 
             {error && (
-              <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 max-w-3xl">
-                <p className="text-sm text-red-700">{error}</p>
+              <div className="mt-6 border border-gray-200 rounded-lg p-4 max-w-3xl">
+                <p className="text-sm text-gray-700">{error}</p>
               </div>
             )}
 
             {isAnalyzing && (
               <div className="mt-8 flex flex-col items-center gap-4">
-                <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+                <Loader2 className="w-8 h-8 text-black animate-spin" />
                 <div className="text-center">
                   <p className="text-lg font-medium text-gray-900">Analyzing website...</p>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-sm text-gray-500 mt-1">
                     This may take up to 30 seconds
                   </p>
                 </div>

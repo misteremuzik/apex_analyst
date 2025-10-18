@@ -93,16 +93,16 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
 
   if (isSubmitted) {
     return (
-      <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200 p-8">
+      <div className="bg-gray-50 rounded-xl border border-gray-200 p-8">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-black rounded-full mb-4">
             <CheckCircle className="w-8 h-8 text-white" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">You're All Set!</h3>
-          <p className="text-gray-700 mb-4">
+          <h3 className="text-2xl font-medium text-gray-900 mb-2">You're All Set!</h3>
+          <p className="text-gray-600 mb-4">
             We'll reach out within 24 hours to schedule your free consultation.
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-500">
             In the meantime, check your inbox for resources to get started on quick wins.
           </p>
         </div>
@@ -111,22 +111,22 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-700 rounded-xl shadow-xl overflow-hidden">
+    <div className="bg-black rounded-xl overflow-hidden">
       <div className="p-8">
         <div className="flex items-start gap-4 mb-6">
-          <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-            <Rocket className="w-7 h-7 text-blue-600" />
+          <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+            <Rocket className="w-7 h-7 text-black" />
           </div>
           <div className="flex-1">
-            <div className="inline-block bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full mb-2">
+            <div className="inline-block bg-white text-black text-xs font-medium px-3 py-1 rounded-full mb-2">
               LIMITED TIME OFFER
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">
+            <h3 className="text-2xl font-medium text-white mb-2">
               {hasSignificantIssues
                 ? "Don't Let AI Search Engines Pass You By"
                 : "Take Your AI Readiness to the Next Level"}
             </h3>
-            <p className="text-blue-100 text-lg">
+            <p className="text-gray-300 text-lg">
               {hasSignificantIssues
                 ? `Your site scored ${analysis.overall_score}/100. Every point you're missing means lost visibility in AI search results.`
                 : `You're close to perfect AI readiness. Let us help you achieve that final 20% for maximum impact.`}
@@ -135,15 +135,15 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
         </div>
 
         {hasSignificantIssues && criticalIssues.length > 0 && (
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-6 border border-white/20">
-            <p className="text-white font-semibold mb-3 flex items-center gap-2">
+          <div className="bg-gray-900 rounded-lg p-4 mb-6 border border-gray-700">
+            <p className="text-white font-medium mb-3 flex items-center gap-2">
               <Shield className="w-5 h-5" />
               Critical Issues Detected:
             </p>
             <ul className="space-y-2">
               {criticalIssues.slice(0, 3).map((issue, index) => (
-                <li key={index} className="text-blue-100 text-sm flex items-start gap-2">
-                  <span className="text-yellow-400 mt-0.5">⚠</span>
+                <li key={index} className="text-gray-300 text-sm flex items-start gap-2">
+                  <span className="text-white mt-0.5">⚠</span>
                   <span>{issue}</span>
                 </li>
               ))}
@@ -152,48 +152,48 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
         )}
 
         <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-            <Zap className="w-6 h-6 text-yellow-400 mb-2" />
-            <h4 className="text-white font-semibold mb-1">Fast Results</h4>
-            <p className="text-blue-100 text-sm">See improvements within 2-4 weeks</p>
+          <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+            <Zap className="w-6 h-6 text-white mb-2" />
+            <h4 className="text-white font-medium mb-1">Fast Results</h4>
+            <p className="text-gray-300 text-sm">See improvements within 2-4 weeks</p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-            <TrendingUp className="w-6 h-6 text-green-400 mb-2" />
-            <h4 className="text-white font-semibold mb-1">Proven Track Record</h4>
-            <p className="text-blue-100 text-sm">Average 45% score improvement</p>
+          <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+            <TrendingUp className="w-6 h-6 text-white mb-2" />
+            <h4 className="text-white font-medium mb-1">Proven Track Record</h4>
+            <p className="text-gray-300 text-sm">Average 45% score improvement</p>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-            <Shield className="w-6 h-6 text-cyan-400 mb-2" />
-            <h4 className="text-white font-semibold mb-1">Future-Proof</h4>
-            <p className="text-blue-100 text-sm">Stay ahead of AI search trends</p>
+          <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+            <Shield className="w-6 h-6 text-white mb-2" />
+            <h4 className="text-white font-medium mb-1">Future-Proof</h4>
+            <p className="text-gray-300 text-sm">Stay ahead of AI search trends</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-2xl">
-          <h4 className="text-xl font-bold text-gray-900 mb-2">
+        <div className="bg-white rounded-lg p-6">
+          <h4 className="text-xl font-medium text-gray-900 mb-2">
             Get Your Free AI Readiness Consultation
           </h4>
           <p className="text-gray-600 mb-4">
-            Our experts at <span className="font-bold text-blue-600">Round 1 Solutions</span> will create a custom roadmap to fix these issues and skyrocket your AI search visibility.
+            Our experts at <span className="font-medium text-black">Round 1 Solutions</span> will create a custom roadmap to fix these issues and skyrocket your AI search visibility.
           </p>
 
-          <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4 mb-4 border border-blue-200">
-            <p className="text-sm font-semibold text-gray-900 mb-2">Your Free Consultation Includes:</p>
+          <div className="bg-gray-50 rounded-lg p-4 mb-4 border border-gray-200">
+            <p className="text-sm font-medium text-gray-900 mb-2">Your Free Consultation Includes:</p>
             <ul className="space-y-1.5">
-              <li className="text-sm text-gray-700 flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+              <li className="text-sm text-gray-600 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-black flex-shrink-0" />
                 <span>30-minute strategy session with an AI SEO specialist</span>
               </li>
-              <li className="text-sm text-gray-700 flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+              <li className="text-sm text-gray-600 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-black flex-shrink-0" />
                 <span>Custom implementation roadmap prioritized by impact</span>
               </li>
-              <li className="text-sm text-gray-700 flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+              <li className="text-sm text-gray-600 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-black flex-shrink-0" />
                 <span>Competitive analysis vs. top-ranking sites in your niche</span>
               </li>
-              <li className="text-sm text-gray-700 flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+              <li className="text-sm text-gray-600 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-black flex-shrink-0" />
                 <span>Quick-win recommendations you can implement today</span>
               </li>
             </ul>
@@ -207,7 +207,7 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
                 disabled={isSubmitting}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400 transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
               />
               {error && (
                 <p className="mt-2 text-sm text-red-600">{error}</p>
@@ -217,7 +217,7 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold py-4 px-6 rounded-lg hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+              className="w-full bg-white text-black font-medium py-4 px-6 rounded-lg hover:bg-gray-100 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 'Submitting...'
@@ -236,7 +236,7 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-blue-100 text-sm">
+          <p className="text-gray-400 text-sm">
             Get ahead of your competition and improve your AI search rankings with Round 1 Solutions
           </p>
         </div>

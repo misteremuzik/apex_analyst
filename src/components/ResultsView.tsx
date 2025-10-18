@@ -27,10 +27,10 @@ export function ResultsView({ analysis, onReset }: ResultsViewProps) {
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-8">
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+      <div className="bg-white rounded-2xl border border-gray-200 p-8">
         <button
           onClick={onReset}
-          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          className="flex items-center gap-2 text-sm text-gray-500 hover:text-black mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Analyze another website
@@ -43,17 +43,13 @@ export function ResultsView({ analysis, onReset }: ResultsViewProps) {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 text-center">
+        <div className="bg-gray-50 rounded-xl p-8 text-center border border-gray-200">
           <div className="inline-block">
-            <div
-              className={`text-6xl font-bold bg-gradient-to-r ${getOverallScoreColor(
-                analysis.overall_score
-              )} bg-clip-text text-transparent mb-2`}
-            >
+            <div className="text-6xl font-bold text-black mb-2">
               {analysis.overall_score}
             </div>
-            <div className="text-sm text-gray-600 mb-4">Overall Score</div>
-            <div className="text-lg font-semibold text-gray-900">
+            <div className="text-sm text-gray-500 mb-4">Overall Score</div>
+            <div className="text-lg font-medium text-gray-700">
               {getOverallLabel(analysis.overall_score)}
             </div>
           </div>

@@ -85,28 +85,28 @@ export function ChatAssistant({ analysisId }: ChatAssistantProps) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-600 to-cyan-600 p-4">
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-black p-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-            <span className="material-symbols-outlined text-blue-600 text-2xl">owl</span>
+            <span className="material-symbols-outlined text-black text-2xl">owl</span>
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">AI Assistant</h2>
-            <p className="text-sm text-blue-100">Ask questions about your results</p>
+            <h2 className="text-lg font-medium text-white">AI Assistant</h2>
+            <p className="text-sm text-gray-300">Ask questions about your results</p>
           </div>
         </div>
       </div>
 
-      <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div className="h-96 overflow-y-auto p-4 space-y-4 bg-white">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {message.role === 'assistant' && (
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="material-symbols-outlined text-blue-600 text-xl">owl</span>
+              <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="material-symbols-outlined text-black text-xl">owl</span>
               </div>
             )}
 
@@ -114,8 +114,8 @@ export function ChatAssistant({ analysisId }: ChatAssistantProps) {
               <div
                 className={`rounded-lg p-3 ${
                   message.role === 'user'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white border border-gray-200 text-gray-900'
+                    ? 'bg-black text-white'
+                    : 'bg-gray-50 border border-gray-200 text-gray-900'
                 }`}
               >
                 {message.role === 'user' ? (
@@ -137,15 +137,15 @@ export function ChatAssistant({ analysisId }: ChatAssistantProps) {
                       href={source.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block bg-white border border-gray-200 rounded-lg p-3 hover:border-blue-300 hover:shadow-sm transition-all group"
+                      className="block bg-white border border-gray-200 rounded-lg p-3 hover:border-gray-400 transition-all group"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+                            <h4 className="text-sm font-semibold text-gray-900 group-hover:text-black transition-colors truncate">
                               {source.title}
                             </h4>
-                            <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-blue-600 flex-shrink-0" />
+                            <ExternalLink className="w-3 h-3 text-gray-400 group-hover:text-black flex-shrink-0" />
                           </div>
                           <p className="text-xs text-gray-600 line-clamp-2">{source.description}</p>
                         </div>
@@ -166,11 +166,11 @@ export function ChatAssistant({ analysisId }: ChatAssistantProps) {
 
         {isLoading && (
           <div className="flex gap-3 justify-start">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="material-symbols-outlined text-blue-600 text-xl">owl</span>
+            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="material-symbols-outlined text-black text-xl">owl</span>
             </div>
-            <div className="bg-white border border-gray-200 rounded-lg p-3">
-              <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+              <Loader2 className="w-5 h-5 text-black animate-spin" />
             </div>
           </div>
         )}
@@ -186,12 +186,12 @@ export function ChatAssistant({ analysisId }: ChatAssistantProps) {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about your recommendations..."
             disabled={isLoading}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed text-sm"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400 transition-colors disabled:bg-gray-50 disabled:cursor-not-allowed text-sm"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="bg-black text-white p-2 rounded-lg hover:bg-gray-800 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Send className="w-5 h-5" />
           </button>

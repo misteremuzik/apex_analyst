@@ -16,34 +16,34 @@ export function RecommendationsList({ recommendations }: RecommendationsListProp
       case 'critical':
         return {
           icon: <AlertCircle className="w-5 h-5" />,
-          bgColor: 'bg-red-50 border-red-200',
-          iconColor: 'text-red-600',
+          bgColor: 'bg-gray-50 border-gray-300',
+          iconColor: 'text-gray-700',
           label: 'Critical',
-          labelColor: 'bg-red-100 text-red-700',
+          labelColor: 'bg-black text-white',
         };
       case 'high':
         return {
           icon: <AlertTriangle className="w-5 h-5" />,
-          bgColor: 'bg-orange-50 border-orange-200',
-          iconColor: 'text-orange-600',
+          bgColor: 'bg-gray-50 border-gray-300',
+          iconColor: 'text-gray-700',
           label: 'High',
-          labelColor: 'bg-orange-100 text-orange-700',
+          labelColor: 'bg-gray-800 text-white',
         };
       case 'medium':
         return {
           icon: <Info className="w-5 h-5" />,
-          bgColor: 'bg-yellow-50 border-yellow-200',
-          iconColor: 'text-yellow-600',
+          bgColor: 'bg-gray-50 border-gray-300',
+          iconColor: 'text-gray-700',
           label: 'Medium',
-          labelColor: 'bg-yellow-100 text-yellow-700',
+          labelColor: 'bg-gray-600 text-white',
         };
       default:
         return {
           icon: <CheckCircle className="w-5 h-5" />,
-          bgColor: 'bg-green-50 border-green-200',
-          iconColor: 'text-green-600',
+          bgColor: 'bg-gray-50 border-gray-300',
+          iconColor: 'text-gray-700',
           label: 'Low',
-          labelColor: 'bg-green-100 text-green-700',
+          labelColor: 'bg-gray-400 text-white',
         };
     }
   };
@@ -54,9 +54,9 @@ export function RecommendationsList({ recommendations }: RecommendationsListProp
   });
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">Recommendations</h2>
-      <p className="text-sm text-gray-600 mb-6">
+    <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <h2 className="text-xl font-medium text-gray-900 mb-4">Recommendations</h2>
+      <p className="text-sm text-gray-500 mb-6">
         Priority-ordered improvements to enhance your website's AI readiness
       </p>
 
@@ -66,18 +66,18 @@ export function RecommendationsList({ recommendations }: RecommendationsListProp
           return (
             <div
               key={index}
-              className={`border rounded-lg p-4 ${config.bgColor} transition-all hover:shadow-sm`}
+              className={`border rounded-lg p-4 ${config.bgColor} transition-all hover:border-gray-400`}
             >
               <div className="flex items-start gap-4">
                 <div className={config.iconColor}>{config.icon}</div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className={`text-xs font-semibold px-2 py-1 rounded ${config.labelColor}`}>
-                      {config.label} Priority
+                    <span className={`text-xs font-medium px-2 py-1 rounded ${config.labelColor}`}>
+                      {config.label}
                     </span>
-                    <span className="text-xs font-medium text-gray-600">{rec.category}</span>
+                    <span className="text-xs font-medium text-gray-500">{rec.category}</span>
                   </div>
-                  <p className="text-sm text-gray-700 leading-relaxed">{rec.message}</p>
+                  <p className="text-sm text-gray-600 leading-relaxed">{rec.message}</p>
                 </div>
               </div>
             </div>

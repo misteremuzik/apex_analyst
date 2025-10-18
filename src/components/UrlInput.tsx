@@ -32,40 +32,32 @@ export function UrlInput({ onAnalyze, isAnalyzing }: UrlInputProps) {
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
-            <span className="material-symbols-outlined text-white text-3xl">owl</span>
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Apex Analyst</h1>
-            <p className="text-sm text-gray-600">Analyze your website for AI search compatibility</p>
-          </div>
+      <div className="text-center mb-12">
+        <h1 className="text-5xl font-normal text-black mb-4">Apex Analyst</h1>
+        <p className="text-xl text-gray-500">Analyze your website for AI search compatibility</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <input
+            type="text"
+            id="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Enter your website URL (e.g. https://yourdomain.com)"
+            disabled={isAnalyzing}
+            className="w-full px-6 py-4 text-gray-600 border border-gray-300 rounded-full focus:outline-none focus:border-gray-400 transition-colors disabled:bg-gray-50 disabled:cursor-not-allowed"
+          />
+          {error && (
+            <p className="mt-2 text-sm text-gray-600 text-center">{error}</p>
+          )}
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-              Website URL
-            </label>
-            <input
-              type="text"
-              id="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com"
-              disabled={isAnalyzing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
-            />
-            {error && (
-              <p className="mt-2 text-sm text-red-600">{error}</p>
-            )}
-          </div>
-
+        <div className="flex justify-center">
           <button
             type="submit"
             disabled={isAnalyzing}
-            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-medium py-3 px-6 rounded-lg hover:from-blue-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            className="bg-black text-white font-medium py-3 px-12 rounded-full hover:bg-gray-800 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-lg"
           >
             {isAnalyzing ? (
               <>
@@ -73,18 +65,11 @@ export function UrlInput({ onAnalyze, isAnalyzing }: UrlInputProps) {
                 Analyzing...
               </>
             ) : (
-              'Analyze Website'
+              'Analyze'
             )}
           </button>
-        </form>
-
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <p className="text-xs text-gray-600 text-center">
-            We'll analyze your website for structured data, mobile-friendliness, accessibility,
-            content quality, technical SEO, and privacy compliance.
-          </p>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
