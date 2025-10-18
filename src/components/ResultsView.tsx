@@ -6,6 +6,7 @@ import { ChatAssistant } from './ChatAssistant';
 import { ConsultationAd } from './ConsultationAd';
 import { PremiumFeatureGate } from './PremiumFeatureGate';
 import { PerformanceMetrics } from './PerformanceMetrics';
+import VisibilityScore from './VisibilityScore';
 
 interface ResultsViewProps {
   analysis: WebsiteAnalysis;
@@ -99,6 +100,28 @@ export function ResultsView({ analysis, onReset }: ResultsViewProps) {
       {analysis.recommendations && analysis.recommendations.length > 0 && (
         <RecommendationsList recommendations={analysis.recommendations} />
       )}
+
+      <PremiumFeatureGate
+        featureName="AEO Visibility Score"
+        description="Discover how visible your website is to AI search engines with comprehensive Answer Engine Optimization metrics"
+      >
+        <div className="bg-white rounded-2xl border border-gray-200 p-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">AEO Visibility Score</h2>
+          <VisibilityScore
+            aeoOverallScore={analysis.aeo_overall_score || 0}
+            structuredDataScore={analysis.structured_data_score || 0}
+            snippetOptimizationScore={analysis.snippet_optimization_score || 0}
+            crawlabilityScore={analysis.crawlability_score || 0}
+            featuredSnippetReadyScore={analysis.featured_snippet_ready_score || 0}
+            contentQualityScore={analysis.content_quality_score || 0}
+            technicalSeoScore={analysis.technical_seo_score || 0}
+            pagesAnalyzed={analysis.pages_analyzed || 1}
+            aeoSchemasCount={analysis.aeo_schemas_count || 0}
+            totalIssues={analysis.total_issues || 0}
+            aiModelAccess={analysis.ai_model_access || '0/3'}
+          />
+        </div>
+      </PremiumFeatureGate>
 
       <PremiumFeatureGate
         featureName="Performance Metrics"

@@ -32,6 +32,15 @@ export interface WebsiteAnalysis {
   seo_score?: number;
   best_practices_score?: number;
   performance_analyzed_at?: string | null;
+  aeo_overall_score?: number;
+  snippet_optimization_score?: number;
+  crawlability_score?: number;
+  featured_snippet_ready_score?: number;
+  pages_analyzed?: number;
+  aeo_schemas_count?: number;
+  total_issues?: number;
+  ai_model_access?: string;
+  visibility_metrics?: Record<string, any>;
   created_at: string;
   completed_at: string | null;
 }

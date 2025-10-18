@@ -4,8 +4,10 @@ import { ResultsView } from './components/ResultsView';
 import { LandingPage } from './components/LandingPage';
 import { Navbar } from './components/Navbar';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from './contexts/AuthContext';
 
 function App() {
+  const { isPremium } = useAuth();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<WebsiteAnalysis | null>(null);
   const [error, setError] = useState<string>('');
@@ -40,6 +42,23 @@ function App() {
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Analysis failed');
+      }
+
+      if (isPremium) {
+        const visibilityUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/calculate-visibility-score`;
+        await fetch(visibilityUrl, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            url,
+            analysisId: newAnalysis.id,
+          }),
+        }).catch(err => {
+          console.error('Visibility score calculation failed:', err);
+        });
       }
 
       const subscription = supabase
