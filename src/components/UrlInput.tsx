@@ -33,6 +33,11 @@ export function UrlInput({ onAnalyze, isAnalyzing }: UrlInputProps) {
   return (
     <div className="w-full max-w-3xl mx-auto">
       <div className="text-center mb-12">
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center">
+            <span className="material-symbols-outlined text-white text-4xl">owl</span>
+          </div>
+        </div>
         <h1 className="text-5xl font-normal text-black mb-4">Apex Analyst</h1>
         <p className="text-xl text-gray-500">Analyze your website for AI search compatibility</p>
       </div>
