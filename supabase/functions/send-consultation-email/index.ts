@@ -40,8 +40,8 @@ Deno.serve(async (req: Request) => {
       throw new Error("RESEND_API_KEY not configured");
     }
 
-    const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "onboarding@resend.dev";
-    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "admin@example.com";
+    const fromEmail = Deno.env.get("RESEND_FROM_EMAIL") || "service@round1solutions.com";
+    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "horrorfarm@gmail.com";
 
     // Send confirmation email to user
     const userEmailResponse = await fetch("https://api.resend.com/emails", {
