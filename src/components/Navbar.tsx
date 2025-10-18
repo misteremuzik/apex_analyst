@@ -25,11 +25,8 @@ export function Navbar({ onLogoClick }: NavbarProps) {
           <div className="flex items-center justify-between">
             <button
               onClick={onLogoClick}
-              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+              className="hover:opacity-80 transition-opacity"
             >
-              <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-2xl">owl</span>
-              </div>
               <span className="text-xl font-medium text-gray-900">Apex Analyst</span>
             </button>
 
