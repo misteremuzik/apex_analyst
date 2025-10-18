@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { Crown, Lock, Sparkles } from 'lucide-react';
+import { Crown, Lock, Info } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthModal } from './AuthModal';
 
@@ -18,6 +18,7 @@ export function PremiumFeatureGate({
 }: PremiumFeatureGateProps) {
   const { user, isPremium } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   if (isPremium) {
     return <>{children}</>;
@@ -30,8 +31,51 @@ export function PremiumFeatureGate({
   return (
     <>
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/80 to-white z-10 flex items-center justify-center backdrop-blur-sm">
-          <div className="bg-white border-2 border-black rounded-2xl p-8 max-w-md mx-4 shadow-xl">
+        <div className="pointer-events-none select-none opacity-40 grayscale">
+          {children}
+        </div>
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg">
+              <Crown className="w-5 h-5 text-yellow-400" />
+              <span className="font-medium">Premium Feature</span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowDetails(true)}
+                className="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors inline-flex items-center gap-2 shadow-sm"
+              >
+                <Info className="w-4 h-4" />
+                Learn More
+              </button>
+              {user ? (
+                <button
+                  onClick={() => {
+                    alert('Premium subscriptions coming soon! We\'ll notify you when they\'re available.');
+                  }}
+                  className="bg-black text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center gap-2 shadow-sm"
+                >
+                  <Crown className="w-4 h-4 text-yellow-400" />
+                  Upgrade to Premium
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="bg-black text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center gap-2 shadow-sm"
+                >
+                  <Lock className="w-4 h-4" />
+                  Sign In
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {showDetails && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowDetails(false)}>
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-center mb-4">
               <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center">
                 <Crown className="w-8 h-8 text-yellow-400" />
@@ -47,23 +91,23 @@ export function PremiumFeatureGate({
               <p className="text-sm font-medium text-gray-900 mb-3">Premium includes:</p>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-sm text-gray-600">
-                  <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
+                  <Crown className="w-4 h-4 text-yellow-400 flex-shrink-0" />
                   Performance metrics & Core Web Vitals
                 </li>
                 <li className="flex items-center gap-2 text-sm text-gray-600">
-                  <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
+                  <Crown className="w-4 h-4 text-yellow-400 flex-shrink-0" />
                   AI Assistant with expert guidance
                 </li>
                 <li className="flex items-center gap-2 text-sm text-gray-600">
-                  <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
+                  <Crown className="w-4 h-4 text-yellow-400 flex-shrink-0" />
                   Unlimited website analyses
                 </li>
                 <li className="flex items-center gap-2 text-sm text-gray-600">
-                  <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
+                  <Crown className="w-4 h-4 text-yellow-400 flex-shrink-0" />
                   Analysis history & tracking
                 </li>
                 <li className="flex items-center gap-2 text-sm text-gray-600">
-                  <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
+                  <Crown className="w-4 h-4 text-yellow-400 flex-shrink-0" />
                   Priority support
                 </li>
               </ul>
@@ -76,27 +120,31 @@ export function PremiumFeatureGate({
                   alert('Premium subscriptions coming soon! We\'ll notify you when they\'re available.');
                 }}
               >
-                <Crown className="w-5 h-5" />
+                <Crown className="w-5 h-5 text-yellow-400" />
                 Upgrade to Premium
               </button>
             ) : (
               <button
-                onClick={() => setShowAuthModal(true)}
+                onClick={() => {
+                  setShowDetails(false);
+                  setShowAuthModal(true);
+                }}
                 className="w-full bg-black text-white font-medium py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
               >
                 <Lock className="w-5 h-5" />
-                Sign In to Unlock
+                Sign In to Continue
               </button>
             )}
 
-            <p className="text-xs text-gray-500 text-center mt-4">
-              Premium features coming soon
-            </p>
+            <button
+              onClick={() => setShowDetails(false)}
+              className="w-full mt-3 text-gray-600 hover:text-gray-900 text-sm font-medium"
+            >
+              Close
+            </button>
           </div>
         </div>
-
-        <div className="pointer-events-none blur-sm opacity-50">{children}</div>
-      </div>
+      )}
 
       <AuthModal
         isOpen={showAuthModal}
