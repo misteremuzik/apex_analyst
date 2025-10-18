@@ -130,6 +130,10 @@ Deno.serve(async (req: Request) => {
 
     const baseUrl = req.headers.get('origin') || 'https://apex-analyst.com';
 
+    console.log('Creating checkout session with priceId:', priceId);
+    console.log('Customer ID:', customerId);
+    console.log('Base URL:', baseUrl);
+
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [
@@ -145,6 +149,9 @@ Deno.serve(async (req: Request) => {
         supabase_user_id: user.id,
       },
     });
+
+    console.log('Checkout session created:', session.id);
+    console.log('Checkout URL:', session.url);
 
     return new Response(
       JSON.stringify({ url: session.url }),

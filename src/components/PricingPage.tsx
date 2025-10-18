@@ -127,6 +127,12 @@ export function PricingPage() {
       }
 
       const { url } = await response.json();
+      console.log('Checkout URL received:', url);
+
+      if (!url) {
+        throw new Error('No checkout URL received from server');
+      }
+
       window.location.href = url;
     } catch (err) {
       console.error('Checkout error:', err);
