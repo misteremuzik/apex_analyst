@@ -16,7 +16,20 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
+    const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
+    
+    if (!stripeKey) {
+      console.error('STRIPE_SECRET_KEY not found in environment');
+      return new Response(
+        JSON.stringify({ error: 'Stripe configuration error. Please contact support.' }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const stripe = new Stripe(stripeKey, {
       apiVersion: '2024-12-18.acacia',
     });
 
@@ -43,8 +56,19 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Supabase configuration missing');
+      return new Response(
+        JSON.stringify({ error: 'Configuration error' }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
 
     const token = authHeader.replace('Bearer ', '');
     const verifyResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
@@ -132,7 +156,7 @@ Deno.serve(async (req: Request) => {
   } catch (error) {
     console.error('Error creating checkout session:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error.message || 'An unexpected error occurred' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
