@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Globe, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface UrlInputProps {
   onAnalyze: (url: string) => void;

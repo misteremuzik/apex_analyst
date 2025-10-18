@@ -39,16 +39,39 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
     setIsSubmitting(true);
 
     try {
-      const { error: insertError } = await supabase
+      const { data: leadData, error: insertError } = await supabase
         .from('consultation_leads')
         .insert({
           email: email.trim(),
           analysis_id: analysis.id,
           website_url: analysis.url,
           overall_score: analysis.overall_score,
-        });
+        })
+        .select()
+        .single();
 
       if (insertError) throw insertError;
+
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-consultation-email`;
+      const emailResponse = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          leadId: leadData.id,
+          email: email.trim(),
+          websiteUrl: analysis.url,
+          overallScore: analysis.overall_score,
+        }),
+      });
+
+      if (!emailResponse.ok) {
+        const errorData = await emailResponse.json();
+        console.error('Email sending failed:', errorData);
+        setError('Your request was saved, but we had trouble sending the confirmation email. We\'ll still contact you within 24 hours.');
+      }
 
       setIsSubmitted(true);
     } catch (err) {

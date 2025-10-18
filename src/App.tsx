@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { supabase, WebsiteAnalysis } from './lib/supabase';
 import { UrlInput } from './components/UrlInput';
 import { ResultsView } from './components/ResultsView';
