@@ -4,6 +4,7 @@ import { ScoreCard } from './ScoreCard';
 import { RecommendationsList } from './RecommendationsList';
 import { ChatAssistant } from './ChatAssistant';
 import { ConsultationAd } from './ConsultationAd';
+import { PremiumFeatureGate } from './PremiumFeatureGate';
 
 interface ResultsViewProps {
   analysis: WebsiteAnalysis;
@@ -11,13 +12,6 @@ interface ResultsViewProps {
 }
 
 export function ResultsView({ analysis, onReset }: ResultsViewProps) {
-  const getOverallScoreColor = (score: number) => {
-    if (score >= 80) return 'from-green-500 to-emerald-500';
-    if (score >= 60) return 'from-yellow-500 to-orange-500';
-    if (score >= 30) return 'from-orange-500 to-red-500';
-    return 'from-red-500 to-rose-500';
-  };
-
   const getOverallLabel = (score: number) => {
     if (score >= 80) return 'Excellent AI Readiness';
     if (score >= 60) return 'Good AI Readiness';
@@ -105,7 +99,12 @@ export function ResultsView({ analysis, onReset }: ResultsViewProps) {
         <RecommendationsList recommendations={analysis.recommendations} />
       )}
 
-      <ChatAssistant analysisId={analysis.id} />
+      <PremiumFeatureGate
+        featureName="AI Assistant"
+        description="Get instant answers about your analysis and personalized improvement strategies from our AI expert"
+      >
+        <ChatAssistant analysisId={analysis.id} />
+      </PremiumFeatureGate>
 
       <ConsultationAd analysis={analysis} />
     </div>

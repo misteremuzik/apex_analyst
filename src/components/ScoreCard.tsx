@@ -7,14 +7,7 @@ interface ScoreCardProps {
 }
 
 export function ScoreCard({ title, score, details, icon, findings = [] }: ScoreCardProps) {
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-black';
-    if (score >= 60) return 'text-gray-700';
-    if (score >= 30) return 'text-gray-700';
-    return 'text-gray-700';
-  };
-
-  const getScoreBgColor = (score: number) => {
+  const getScoreBgColor = () => {
     return 'bg-gray-50 border-gray-200';
   };
 
@@ -29,7 +22,7 @@ export function ScoreCard({ title, score, details, icon, findings = [] }: ScoreC
     <div className="bg-white rounded-xl border border-gray-200 p-6 hover:border-gray-300 transition-colors">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getScoreBgColor(score)} text-gray-600`}>
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getScoreBgColor()} text-gray-600`}>
             {icon}
           </div>
           <div>

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { supabase, WebsiteAnalysis } from './lib/supabase';
-import { UrlInput } from './components/UrlInput';
 import { ResultsView } from './components/ResultsView';
+import { LandingPage } from './components/LandingPage';
+import { Navbar } from './components/Navbar';
 import { Loader2 } from 'lucide-react';
 
 function App() {
@@ -88,14 +89,16 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4">
-      <div className="container mx-auto">
-        {!analysis ? (
-          <div className="flex flex-col items-center justify-center min-h-[70vh]">
-            <UrlInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
+    <div className="min-h-screen bg-white">
+      <Navbar onLogoClick={handleReset} />
 
+      {!analysis && !isAnalyzing ? (
+        <LandingPage onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
+      ) : (
+        <div className="py-12 px-4">
+          <div className="container mx-auto">
             {error && (
-              <div className="mt-6 border border-gray-200 rounded-lg p-4 max-w-3xl">
+              <div className="mt-6 border border-gray-200 rounded-lg p-4 max-w-3xl mx-auto">
                 <p className="text-sm text-gray-700">{error}</p>
               </div>
             )}
@@ -111,11 +114,11 @@ function App() {
                 </div>
               </div>
             )}
+
+            {analysis && <ResultsView analysis={analysis} onReset={handleReset} />}
           </div>
-        ) : (
-          <ResultsView analysis={analysis} onReset={handleReset} />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
