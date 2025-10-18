@@ -27,6 +27,11 @@ export interface WebsiteAnalysis {
     category: string;
     message: string;
   }>;
+  performance_score?: number;
+  performance_metrics?: Record<string, any>;
+  seo_score?: number;
+  best_practices_score?: number;
+  performance_analyzed_at?: string | null;
   created_at: string;
   completed_at: string | null;
 }

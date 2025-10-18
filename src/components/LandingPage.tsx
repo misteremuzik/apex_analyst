@@ -91,6 +91,10 @@ export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
               </div>
               <div className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                <span className="text-sm text-white font-medium">Performance Metrics & Core Web Vitals</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                 <span className="text-sm text-white font-medium">AI Assistant Chat Support</span>
               </div>
               <div className="flex items-start gap-3">

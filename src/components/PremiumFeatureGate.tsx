@@ -48,6 +48,10 @@ export function PremiumFeatureGate({
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 text-sm text-gray-600">
                   <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
+                  Performance metrics & Core Web Vitals
+                </li>
+                <li className="flex items-center gap-2 text-sm text-gray-600">
+                  <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
                   AI Assistant with expert guidance
                 </li>
                 <li className="flex items-center gap-2 text-sm text-gray-600">

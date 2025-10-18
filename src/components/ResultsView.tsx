@@ -5,6 +5,7 @@ import { RecommendationsList } from './RecommendationsList';
 import { ChatAssistant } from './ChatAssistant';
 import { ConsultationAd } from './ConsultationAd';
 import { PremiumFeatureGate } from './PremiumFeatureGate';
+import { PerformanceMetrics } from './PerformanceMetrics';
 
 interface ResultsViewProps {
   analysis: WebsiteAnalysis;
@@ -98,6 +99,18 @@ export function ResultsView({ analysis, onReset }: ResultsViewProps) {
       {analysis.recommendations && analysis.recommendations.length > 0 && (
         <RecommendationsList recommendations={analysis.recommendations} />
       )}
+
+      <PremiumFeatureGate
+        featureName="Performance Metrics"
+        description="Deep dive into your website's loading speed, Core Web Vitals, and performance scores with Google PageSpeed Insights"
+      >
+        <PerformanceMetrics
+          analysisId={analysis.id}
+          url={analysis.url}
+          performanceScore={analysis.performance_score}
+          performanceMetrics={analysis.performance_metrics}
+        />
+      </PremiumFeatureGate>
 
       <PremiumFeatureGate
         featureName="AI Assistant"
