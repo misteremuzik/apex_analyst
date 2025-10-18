@@ -50,7 +50,15 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
         .select()
         .single();
 
-      if (insertError) throw insertError;
+      if (insertError) {
+        console.error('Database insert error:', insertError);
+        throw insertError;
+      }
+
+      if (!leadData) {
+        console.error('No lead data returned from insert');
+        throw new Error('Failed to create lead record');
+      }
 
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-consultation-email`;
       const emailResponse = await fetch(apiUrl, {
@@ -75,7 +83,9 @@ export function ConsultationAd({ analysis }: ConsultationAdProps) {
 
       setIsSubmitted(true);
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      console.error('Form submission error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
+      setError(`Error: ${errorMessage}. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }
