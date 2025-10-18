@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Check, Sparkles, Shield, Zap, TrendingUp, Search, Crown } from 'lucide-react';
 import { UrlInput } from './UrlInput';
 import { AuthModal } from './AuthModal';
+import { useAuth } from '../contexts/AuthContext';
 
 interface LandingPageProps {
   onAnalyze: (url: string) => void;
@@ -9,6 +10,7 @@ interface LandingPageProps {
 }
 
 export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
+  const { user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
 
@@ -34,7 +36,30 @@ export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
             Analyze your website's AI readiness in seconds. Get actionable insights to improve your visibility in ChatGPT, Perplexity, and other AI search results.
           </p>
 
-          <UrlInput onAnalyze={onAnalyze} isAnalyzing={isAnalyzing} />
+          {user ? (
+            <UrlInput onAnalyze={onAnalyze} isAnalyzing={isAnalyzing} />
+          ) : (
+            <div className="text-center">
+              <div className="bg-gray-50 border-2 border-gray-200 rounded-2xl p-8 max-w-2xl mx-auto">
+                <h3 className="text-2xl font-medium text-gray-900 mb-3">
+                  Sign Up to Analyze Your Website
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Create a free account to access AI readiness analysis and start optimizing your website for AI search engines.
+                </p>
+                <button
+                  onClick={() => {
+                    setAuthMode('signup');
+                    setShowAuthModal(true);
+                  }}
+                  className="bg-black text-white font-medium py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center gap-2"
+                >
+                  <Search className="w-5 h-5" />
+                  Get Started for Free
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">

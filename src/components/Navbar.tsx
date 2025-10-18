@@ -8,10 +8,24 @@ interface NavbarProps {
 }
 
 export function Navbar({ onLogoClick }: NavbarProps) {
-  const { user, isPremium, signOut } = useAuth();
+  const { user, premiumUser, signOut } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const getTierLabel = () => {
+    const tier = premiumUser?.subscription_tier || 'free';
+    const tierLabels: { [key: string]: string } = {
+      'free': 'Free',
+      'starter': 'Starter',
+      'professional': 'Professional',
+      'business': 'Business',
+      'enterprise': 'Enterprise',
+    };
+    return tierLabels[tier] || 'Free';
+  };
+
+  const isPaidTier = premiumUser?.subscription_tier && premiumUser.subscription_tier !== 'free';
 
   const handleAuthClick = (mode: 'login' | 'signup') => {
     setAuthMode(mode);
@@ -44,7 +58,7 @@ export function Navbar({ onLogoClick }: NavbarProps) {
                       <User className="w-5 h-5 text-gray-600" />
                     </div>
                     <span className="text-sm text-gray-700">{user.email}</span>
-                    {isPremium && (
+                    {isPaidTier && (
                       <Crown className="w-4 h-4 text-yellow-500" />
                     )}
                   </button>
@@ -59,20 +73,29 @@ export function Navbar({ onLogoClick }: NavbarProps) {
                         <div className="p-3 border-b border-gray-200">
                           <p className="text-sm font-medium text-gray-900">{user.email}</p>
                           <p className="text-xs text-gray-500 mt-1">
-                            {isPremium ? 'Premium Member' : 'Free Tier'}
+                            {getTierLabel()} Plan
                           </p>
+                          {premiumUser && premiumUser.analysis_limit > 0 && (
+                            <p className="text-xs text-gray-500 mt-1">
+                              {premiumUser.analysis_count || 0} / {premiumUser.analysis_limit} analyses used
+                            </p>
+                          )}
+                          {premiumUser && premiumUser.analysis_limit === -1 && (
+                            <p className="text-xs text-green-600 mt-1">
+                              Unlimited analyses
+                            </p>
+                          )}
                         </div>
-                        {!isPremium && (
-                          <button
-                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
-                            onClick={() => {
-                              setShowUserMenu(false);
-                            }}
-                          >
-                            <Crown className="w-4 h-4 text-yellow-500" />
-                            Upgrade to Premium
-                          </button>
-                        )}
+                        <button
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            window.location.href = '/?pricing=true';
+                          }}
+                        >
+                          <Crown className="w-4 h-4 text-yellow-500" />
+                          {isPaidTier ? 'Manage Subscription' : 'Upgrade Plan'}
+                        </button>
                         <button
                           onClick={() => {
                             signOut();

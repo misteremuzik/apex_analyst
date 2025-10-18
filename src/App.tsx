@@ -1,18 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase, WebsiteAnalysis } from './lib/supabase';
 import { ResultsView } from './components/ResultsView';
 import { LandingPage } from './components/LandingPage';
+import { PricingPage } from './components/PricingPage';
 import { Navbar } from './components/Navbar';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from './contexts/AuthContext';
 
 function App() {
-  const { isPremium } = useAuth();
+  const { isPremium, canAnalyze, user } = useAuth();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<WebsiteAnalysis | null>(null);
   const [error, setError] = useState<string>('');
+  const [showPricing, setShowPricing] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('pricing') === 'true') {
+      setShowPricing(true);
+    }
+    if (params.get('success') === 'true') {
+      setError('');
+      setShowPricing(false);
+    }
+  }, []);
 
   const handleAnalyze = async (url: string) => {
+    const { allowed, reason } = canAnalyze();
+    if (!allowed) {
+      setError(reason || 'Unable to analyze at this time');
+      return;
+    }
+
     setIsAnalyzing(true);
     setError('');
     setAnalysis(null);
@@ -20,11 +39,26 @@ function App() {
     try {
       const { data: newAnalysis, error: insertError } = await supabase
         .from('website_analyses')
-        .insert({ url, status: 'pending' })
+        .insert({ url, status: 'pending', user_id: user?.id })
         .select()
         .single();
 
       if (insertError) throw insertError;
+
+      if (user) {
+        const { data: premiumUser } = await supabase
+          .from('premium_users')
+          .select('analysis_count')
+          .eq('id', user.id)
+          .single();
+
+        if (premiumUser) {
+          await supabase
+            .from('premium_users')
+            .update({ analysis_count: (premiumUser.analysis_count || 0) + 1 })
+            .eq('id', user.id);
+        }
+      }
 
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-website`;
       const response = await fetch(apiUrl, {
@@ -109,9 +143,15 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navbar onLogoClick={handleReset} />
+      <Navbar onLogoClick={() => {
+        handleReset();
+        setShowPricing(false);
+        window.history.pushState({}, '', '/');
+      }} />
 
-      {!analysis && !isAnalyzing ? (
+      {showPricing ? (
+        <PricingPage />
+      ) : !analysis && !isAnalyzing ? (
         <LandingPage onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
       ) : (
         <div className="py-12 px-4">

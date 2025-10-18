@@ -5,6 +5,8 @@ import { AuthModal } from './AuthModal';
 
 interface PremiumFeatureGateProps {
   children: ReactNode;
+  feature: string;
+  requiredTier?: 'starter' | 'professional' | 'business' | 'enterprise';
   featureName?: string;
   description?: string;
   showTeaser?: boolean;
@@ -12,15 +14,31 @@ interface PremiumFeatureGateProps {
 
 export function PremiumFeatureGate({
   children,
+  feature,
+  requiredTier = 'starter',
   featureName = 'Premium Feature',
-  description = 'Upgrade to premium to unlock this feature',
+  description = 'Upgrade to unlock this feature',
   showTeaser = true,
 }: PremiumFeatureGateProps) {
-  const { user, isPremium } = useAuth();
+  const { user, hasFeatureAccess } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  if (isPremium) {
+  const tierNames: { [key: string]: string } = {
+    'starter': 'Starter',
+    'professional': 'Professional',
+    'business': 'Business',
+    'enterprise': 'Enterprise',
+  };
+
+  const tierPrices: { [key: string]: string } = {
+    'starter': '$9.99',
+    'professional': '$29.99',
+    'business': '$79.99',
+    'enterprise': '$199.99',
+  };
+
+  if (hasFeatureAccess(feature)) {
     return <>{children}</>;
   }
 
@@ -51,13 +69,11 @@ export function PremiumFeatureGate({
               </button>
               {user ? (
                 <button
-                  onClick={() => {
-                    alert('Premium subscriptions coming soon! We\'ll notify you when they\'re available.');
-                  }}
+                  onClick={() => window.location.href = '/?pricing=true'}
                   className="bg-black text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center gap-2 shadow-sm"
                 >
                   <Crown className="w-4 h-4 text-yellow-400" />
-                  Upgrade to Premium
+                  Upgrade to {tierNames[requiredTier]}
                 </button>
               ) : (
                 <button
@@ -120,12 +136,10 @@ export function PremiumFeatureGate({
             {user ? (
               <button
                 className="w-full bg-black text-white font-medium py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
-                onClick={() => {
-                  alert('Premium subscriptions coming soon! We\'ll notify you when they\'re available.');
-                }}
+                onClick={() => window.location.href = '/?pricing=true'}
               >
                 <Crown className="w-5 h-5 text-yellow-400" />
-                Upgrade to Premium
+                Upgrade to {tierNames[requiredTier]} ({tierPrices[requiredTier]}/month)
               </button>
             ) : (
               <button
