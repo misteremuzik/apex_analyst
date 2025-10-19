@@ -96,12 +96,19 @@ export function PricingPage() {
   const [error, setError] = useState<string>('');
 
   const handleSelectPlan = async (priceId: string, tier: string) => {
+    console.log('=== handleSelectPlan called ===');
+    console.log('priceId:', priceId);
+    console.log('tier:', tier);
+    console.log('user:', user);
+
     if (!user) {
+      console.log('No user found, showing error');
       setError('Please sign in to select a plan');
       return;
     }
 
     if (tier === 'free') {
+      console.log('Free tier selected, ignoring');
       return;
     }
 
@@ -110,32 +117,56 @@ export function PricingPage() {
 
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`;
-      const { data: { session } } = await supabase.auth.getSession();
+      console.log('API URL:', apiUrl);
 
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log('Session retrieved:', session ? 'Yes' : 'No');
+      console.log('Access token exists:', session?.access_token ? 'Yes' : 'No');
+
+      const requestBody = { priceId };
+      console.log('Request body:', requestBody);
+
+      console.log('Making fetch request...');
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session?.access_token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify(requestBody),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create checkout session');
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
+      const responseText = await response.text();
+      console.log('Response text:', responseText);
+
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Failed to parse response as JSON:', e);
+        throw new Error('Invalid response from server');
       }
 
-      const { url } = await response.json();
+      if (!response.ok) {
+        console.error('Response not OK, error data:', responseData);
+        throw new Error(responseData.error || 'Failed to create checkout session');
+      }
+
+      console.log('Response data:', responseData);
+      const { url } = responseData;
       console.log('Checkout URL received:', url);
 
       if (!url) {
         throw new Error('No checkout URL received from server');
       }
 
+      console.log('Redirecting to:', url);
       window.location.href = url;
     } catch (err) {
-      console.error('Checkout error:', err);
+      console.error('=== Checkout error ===', err);
       setError(err instanceof Error ? err.message : 'Failed to start checkout');
       setLoadingTier(null);
     }
