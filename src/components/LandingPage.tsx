@@ -3,20 +3,147 @@ import { Check, Sparkles, Shield, Zap, TrendingUp, Search, Crown } from 'lucide-
 import { UrlInput } from './UrlInput';
 import { AuthModal } from './AuthModal';
 import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 interface LandingPageProps {
   onAnalyze: (url: string) => void;
   isAnalyzing: boolean;
 }
 
+const PRICING_TIERS = [
+  {
+    name: 'Free',
+    price: '$0',
+    priceId: 'price_1SJjamF0amqk11yXTJS9dbRB',
+    tier: 'free',
+    description: 'Perfect for trying out AI optimization',
+    features: [
+      'Complete AI Readiness Score',
+      '6 Category Analysis',
+      '3 Free Analyses',
+    ],
+  },
+  {
+    name: 'Starter',
+    price: '$9.99',
+    priceId: 'price_1SJjbSF0amqk11yXcrXv8Jrd',
+    tier: 'starter',
+    description: 'Great for small businesses',
+    features: [
+      'Everything in Free',
+      'Performance Metrics',
+      'Visibility Score',
+      '25 Analyses/month',
+    ],
+    popular: true,
+  },
+  {
+    name: 'Professional',
+    price: '$29.99',
+    priceId: 'price_1SJjbvF0amqk11yXBfgGEnCj',
+    tier: 'professional',
+    description: 'For professionals who need more',
+    features: [
+      'Everything in Starter',
+      'AI Assistant Chat',
+      'Analysis History',
+      '100 Analyses/month',
+    ],
+  },
+  {
+    name: 'Business',
+    price: '$79.99',
+    priceId: 'price_1SJjcTF0amqk11yXTzeAEAX6',
+    tier: 'business',
+    description: 'Advanced features for teams',
+    features: [
+      'Everything in Professional',
+      'Unlimited Analyses',
+      'Multi-site Dashboard',
+      'API Access',
+    ],
+  },
+  {
+    name: 'Enterprise',
+    price: '$199.99',
+    priceId: 'price_1SJjczF0amqk11yXCpwWPEFQ',
+    tier: 'enterprise',
+    description: 'Custom solutions',
+    features: [
+      'Everything in Business',
+      'White-label Solutions',
+      'Custom Integrations',
+      '24/7 Premium Support',
+    ],
+  },
+];
+
 export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
-  const { user } = useAuth();
+  const { user, premiumUser } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+  const [loadingTier, setLoadingTier] = useState<string | null>(null);
 
   const handleGetStarted = () => {
     setAuthMode('signup');
     setShowAuthModal(true);
+  };
+
+  const handleUpgrade = async (priceId: string, tier: string) => {
+    if (!user) {
+      handleGetStarted();
+      return;
+    }
+
+    if (tier === 'free') {
+      return;
+    }
+
+    setLoadingTier(tier);
+
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout-session`;
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priceId }),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.error || 'Failed to create checkout session');
+      }
+
+      const { url } = responseData;
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setLoadingTier(null);
+    }
+  };
+
+  const isCurrentPlan = (tier: string) => {
+    return premiumUser?.subscription_tier === tier;
+  };
+
+  const getButtonText = (tier: string) => {
+    if (loadingTier === tier) return 'Loading...';
+    if (isCurrentPlan(tier)) return 'Current Plan';
+    if (tier === 'free' && !user) return 'Get Started';
+    if (tier === 'free') return 'Free Forever';
+    return 'Upgrade';
+  };
+
+  const isButtonDisabled = (tier: string) => {
+    return loadingTier !== null || isCurrentPlan(tier) || (tier === 'free' && user !== null);
   };
 
   return (
@@ -62,146 +189,6 @@ export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
           )}
         </div>
 
-        <div className="mb-20">
-          <h2 className="text-3xl font-medium text-center text-gray-900 mb-12">
-            Choose Your Plan
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-xl font-medium text-gray-900 mb-2">Free</h3>
-              <p className="text-sm text-gray-600 mb-4">Perfect for trying out AI optimization</p>
-              <div className="mb-4">
-                <span className="text-3xl font-medium text-black">$0</span>
-              </div>
-              <div className="space-y-2 mb-6 text-sm">
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Complete AI Readiness Score</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">6 Category Analysis</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">3 Free Analyses</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white border-2 border-black rounded-2xl p-6 relative">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <div className="bg-black text-white text-xs font-medium px-3 py-1 rounded-full">POPULAR</div>
-              </div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">Starter</h3>
-              <p className="text-sm text-gray-600 mb-4">Great for small businesses</p>
-              <div className="mb-4">
-                <span className="text-3xl font-medium text-black">$9.99</span>
-                <span className="text-sm text-gray-500">/mo</span>
-              </div>
-              <div className="space-y-2 mb-6 text-sm">
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Everything in Free</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Performance Metrics</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Visibility Score</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">25 Analyses/month</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-xl font-medium text-gray-900 mb-2">Professional</h3>
-              <p className="text-sm text-gray-600 mb-4">For professionals who need more</p>
-              <div className="mb-4">
-                <span className="text-3xl font-medium text-black">$29.99</span>
-                <span className="text-sm text-gray-500">/mo</span>
-              </div>
-              <div className="space-y-2 mb-6 text-sm">
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Everything in Starter</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">AI Assistant Chat</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Analysis History</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">100 Analyses/month</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-xl font-medium text-gray-900 mb-2">Business</h3>
-              <p className="text-sm text-gray-600 mb-4">Advanced features for teams</p>
-              <div className="mb-4">
-                <span className="text-3xl font-medium text-black">$79.99</span>
-                <span className="text-sm text-gray-500">/mo</span>
-              </div>
-              <div className="space-y-2 mb-6 text-sm">
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Everything in Professional</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Unlimited Analyses</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Multi-site Dashboard</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">API Access</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-xl font-medium text-gray-900 mb-2">Enterprise</h3>
-              <p className="text-sm text-gray-600 mb-4">Custom solutions</p>
-              <div className="mb-4">
-                <span className="text-3xl font-medium text-black">$199.99</span>
-                <span className="text-sm text-gray-500">/mo</span>
-              </div>
-              <div className="space-y-2 mb-6 text-sm">
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Everything in Business</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">White-label Solutions</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">Custom Integrations</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">24/7 Premium Support</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="max-w-5xl mx-auto mb-20">
           <h2 className="text-3xl font-medium text-center text-gray-900 mb-12">
             Why AI Readiness Matters
@@ -237,6 +224,70 @@ export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
                 Get actionable recommendations you can implement immediately to boost your AI search rankings.
               </p>
             </div>
+          </div>
+        </div>
+
+        <div className="mb-20">
+          <h2 className="text-3xl font-medium text-center text-gray-900 mb-12">
+            Choose Your Plan
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
+            {PRICING_TIERS.map((tier) => (
+              <div
+                key={tier.tier}
+                className={`rounded-2xl p-6 relative transition-all ${
+                  tier.popular
+                    ? 'border-2 border-black bg-white'
+                    : 'border border-gray-200 bg-white'
+                } ${isCurrentPlan(tier.tier) ? 'opacity-50' : ''}`}
+              >
+                {tier.popular && (
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-black text-white text-xs font-medium px-3 py-1 rounded-full">
+                      POPULAR
+                    </div>
+                  </div>
+                )}
+
+                {isCurrentPlan(tier.tier) && (
+                  <div className="absolute -top-3 right-4">
+                    <div className="bg-green-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+                      Current
+                    </div>
+                  </div>
+                )}
+
+                <h3 className="text-xl font-medium text-gray-900 mb-2">{tier.name}</h3>
+                <p className="text-sm text-gray-600 mb-4">{tier.description}</p>
+                <div className="mb-4">
+                  <span className="text-3xl font-medium text-black">{tier.price}</span>
+                  {tier.tier !== 'free' && (
+                    <span className="text-sm text-gray-500">/mo</span>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => handleUpgrade(tier.priceId, tier.tier)}
+                  disabled={isButtonDisabled(tier.tier)}
+                  className={`w-full py-3 px-4 rounded-lg font-medium mb-6 transition-all ${
+                    tier.popular
+                      ? 'bg-black text-white hover:bg-gray-800'
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  {getButtonText(tier.tier)}
+                </button>
+
+                <div className="space-y-2 text-sm">
+                  {tier.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

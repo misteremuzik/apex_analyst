@@ -73,7 +73,7 @@ export function PremiumFeatureGate({
                   className="bg-black text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center gap-2 shadow-sm"
                 >
                   <Crown className="w-4 h-4 text-yellow-400" />
-                  Upgrade to {tierNames[requiredTier]}
+                  Upgrade
                 </button>
               ) : (
                 <button
