@@ -8,11 +8,11 @@ const corsHeaders = {
 };
 
 const TIER_MAP: { [key: string]: string } = {
-  'price_1SJi75F0amqk11yXGNoLcM20': 'free',
-  'price_1SJi75F0amqk11yXSOn5cDix': 'starter',
-  'price_1SJi75F0amqk11yXujtWvAdb': 'professional',
-  'price_1SJi75F0amqk11yXxqUSvWF2': 'business',
-  'price_1SJi75F0amqk11yX0StLCD0F': 'enterprise',
+  'price_1SJjamF0amqk11yXTJS9dbRB': 'free',
+  'price_1SJjbSF0amqk11yXcrXv8Jrd': 'starter',
+  'price_1SJjbvF0amqk11yXBfgGEnCj': 'professional',
+  'price_1SJjcTF0amqk11yXTzeAEAX6': 'business',
+  'price_1SJjczF0amqk11yXCpwWPEFQ': 'enterprise',
 };
 
 const ANALYSIS_LIMITS: { [key: string]: number } = {
@@ -223,7 +223,7 @@ Deno.serve(async (req: Request) => {
           },
           body: JSON.stringify({
             stripe_subscription_id: null,
-            stripe_price_id: 'price_1SJi75F0amqk11yXGNoLcM20',
+            stripe_price_id: 'price_1SJjamF0amqk11yXTJS9dbRB',
             subscription_status: 'cancelled',
             subscription_tier: 'free',
             cancelled_at: new Date().toISOString(),
