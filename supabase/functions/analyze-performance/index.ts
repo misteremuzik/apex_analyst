@@ -37,7 +37,8 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const pageSpeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;
+    const googleApiKey = Deno.env.get("GOOGLE_PAGESPEED_API_KEY") || "AIzaSyBsM4_t4zbFkKr161mbrDeuBGwLIfFBNQ4";
+    const pageSpeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo&key=${googleApiKey}`;
 
     const pageSpeedResponse = await fetch(pageSpeedUrl);
 
