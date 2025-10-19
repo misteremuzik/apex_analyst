@@ -80,7 +80,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .maybeSingle();
 
       if (error) throw error;
-      setPremiumUser(data);
+
+      // If no premium user exists, create one (fallback for users created before trigger)
+      if (!data) {
+        const { data: userData } = await supabase.auth.getUser();
+        if (userData.user?.email) {
+          const { data: newPremiumUser, error: insertError } = await supabase
+            .from('premium_users')
+            .insert({
+              id: userId,
+              email: userData.user.email,
+              subscription_status: 'free',
+              subscription_tier: 'free',
+            })
+            .select()
+            .single();
+
+          if (insertError) throw insertError;
+          setPremiumUser(newPremiumUser);
+        } else {
+          setPremiumUser(null);
+        }
+      } else {
+        setPremiumUser(data);
+      }
     } catch (error) {
       console.error('Error fetching premium user:', error);
       setPremiumUser(null);
