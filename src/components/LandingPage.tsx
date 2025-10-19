@@ -165,23 +165,23 @@ export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
             Analyze your website's AI readiness in seconds. Get actionable insights to improve your visibility in ChatGPT, Perplexity, and other AI search results.
           </p>
 
-          {user ? (
-            <UrlInput onAnalyze={onAnalyze} isAnalyzing={isAnalyzing} />
-          ) : (
-            <div className="text-center">
-              <div className="bg-gray-50 border-2 border-gray-200 rounded-2xl p-8 max-w-2xl mx-auto">
-                <h3 className="text-2xl font-medium text-gray-900 mb-3">
-                  Sign Up to Analyze Your Website
+          <UrlInput onAnalyze={onAnalyze} isAnalyzing={isAnalyzing} />
+
+          {!user && (
+            <div className="text-center mt-8">
+              <div className="bg-gray-50 border-2 border-gray-200 rounded-2xl p-6 max-w-2xl mx-auto">
+                <h3 className="text-xl font-medium text-gray-900 mb-2">
+                  Want to save your results?
                 </h3>
-                <p className="text-gray-600 mb-6">
-                  Create a free account to access AI readiness analysis and start optimizing your website for AI search engines.
+                <p className="text-gray-600 mb-4">
+                  Sign up for a free account to access analysis history, AI chat assistant, and premium features.
                 </p>
                 <button
                   onClick={() => {
                     setAuthMode('signup');
                     setShowAuthModal(true);
                   }}
-                  className="bg-black text-white font-medium py-3 px-8 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center gap-2"
+                  className="bg-black text-white font-medium py-2 px-6 rounded-lg hover:bg-gray-800 transition-colors inline-flex items-center gap-2"
                 >
                   <Search className="w-5 h-5" />
                   Get Started for Free

@@ -35,10 +35,13 @@ function App() {
   }, []);
 
   const handleAnalyze = async (url: string) => {
-    const { allowed, reason } = canAnalyze();
-    if (!allowed) {
-      setError(reason || 'Unable to analyze at this time');
-      return;
+    // Check if user is logged in and has analysis limit
+    if (user) {
+      const { allowed, reason } = canAnalyze();
+      if (!allowed) {
+        setError(reason || 'Unable to analyze at this time');
+        return;
+      }
     }
 
     setIsAnalyzing(true);
