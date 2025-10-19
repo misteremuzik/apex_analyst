@@ -62,90 +62,142 @@ export function LandingPage({ onAnalyze, isAnalyzing }: LandingPageProps) {
           )}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
-          <div className="bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-2xl p-8">
-            <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center mb-4">
-              <Search className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="text-2xl font-medium text-gray-900 mb-3">Free Tier</h3>
-            <p className="text-gray-600 mb-6">Perfect for getting started with AI optimization</p>
-
-            <div className="space-y-3 mb-6">
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-black flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-700">Complete AI Readiness Score</span>
+        <div className="mb-20">
+          <h2 className="text-3xl font-medium text-center text-gray-900 mb-12">
+            Choose Your Plan
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-medium text-gray-900 mb-2">Free</h3>
+              <p className="text-sm text-gray-600 mb-4">Perfect for trying out AI optimization</p>
+              <div className="mb-4">
+                <span className="text-3xl font-medium text-black">$0</span>
               </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-black flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-700">6 Category Analysis Reports</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-black flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-700">Prioritized Recommendations</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-black flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-700">Free Consultation Offer</span>
-              </div>
-            </div>
-
-            <div className="pt-4 border-t border-gray-200">
-              <div className="text-3xl font-medium text-black mb-1">Free</div>
-              <div className="text-sm text-gray-500">No credit card required</div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-black to-gray-800 border-2 border-black rounded-2xl p-8 relative overflow-hidden">
-            <div className="absolute top-4 right-4">
-              <div className="bg-yellow-400 text-black text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
-                <Crown className="w-3 h-3" />
-                PREMIUM
+              <div className="space-y-2 mb-6 text-sm">
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Complete AI Readiness Score</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">6 Category Analysis</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">3 Free Analyses</span>
+                </div>
               </div>
             </div>
 
-            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center mb-4">
-              <Sparkles className="w-6 h-6 text-black" />
-            </div>
-            <h3 className="text-2xl font-medium text-white mb-3">Premium Tier</h3>
-            <p className="text-gray-300 mb-6">For serious AI optimization and ongoing support</p>
-
-            <div className="space-y-3 mb-6">
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-200">Everything in Free, plus:</span>
+            <div className="bg-white border-2 border-black rounded-2xl p-6 relative">
+              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                <div className="bg-black text-white text-xs font-medium px-3 py-1 rounded-full">POPULAR</div>
               </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-white font-medium">Performance Metrics & Core Web Vitals</span>
+              <h3 className="text-xl font-medium text-gray-900 mb-2">Starter</h3>
+              <p className="text-sm text-gray-600 mb-4">Great for small businesses</p>
+              <div className="mb-4">
+                <span className="text-3xl font-medium text-black">$9.99</span>
+                <span className="text-sm text-gray-500">/mo</span>
               </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-white font-medium">AI Assistant Chat Support</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-200">Analysis History & Tracking</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-200">Unlimited Website Analyses</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-gray-200">Priority Email Support</span>
+              <div className="space-y-2 mb-6 text-sm">
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Everything in Free</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Performance Metrics</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Visibility Score</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">25 Analyses/month</span>
+                </div>
               </div>
             </div>
 
-            <button
-              onClick={handleGetStarted}
-              className="w-full bg-white text-black font-medium py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors mb-4"
-            >
-              Get Started with Premium
-            </button>
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-medium text-gray-900 mb-2">Professional</h3>
+              <p className="text-sm text-gray-600 mb-4">For professionals who need more</p>
+              <div className="mb-4">
+                <span className="text-3xl font-medium text-black">$29.99</span>
+                <span className="text-sm text-gray-500">/mo</span>
+              </div>
+              <div className="space-y-2 mb-6 text-sm">
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Everything in Starter</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">AI Assistant Chat</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Analysis History</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">100 Analyses/month</span>
+                </div>
+              </div>
+            </div>
 
-            <div className="pt-4 border-t border-gray-700">
-              <div className="text-3xl font-medium text-white mb-1">Coming Soon</div>
-              <div className="text-sm text-gray-400">Be the first to know when we launch</div>
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-medium text-gray-900 mb-2">Business</h3>
+              <p className="text-sm text-gray-600 mb-4">Advanced features for teams</p>
+              <div className="mb-4">
+                <span className="text-3xl font-medium text-black">$79.99</span>
+                <span className="text-sm text-gray-500">/mo</span>
+              </div>
+              <div className="space-y-2 mb-6 text-sm">
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Everything in Professional</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Unlimited Analyses</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Multi-site Dashboard</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">API Access</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+              <h3 className="text-xl font-medium text-gray-900 mb-2">Enterprise</h3>
+              <p className="text-sm text-gray-600 mb-4">Custom solutions</p>
+              <div className="mb-4">
+                <span className="text-3xl font-medium text-black">$199.99</span>
+                <span className="text-sm text-gray-500">/mo</span>
+              </div>
+              <div className="space-y-2 mb-6 text-sm">
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Everything in Business</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">White-label Solutions</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">Custom Integrations</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <Check className="w-4 h-4 text-black flex-shrink-0 mt-0.5" />
+                  <span className="text-gray-700">24/7 Premium Support</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
