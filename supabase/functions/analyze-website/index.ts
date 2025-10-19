@@ -32,13 +32,11 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Update status to analyzing
     await supabase
       .from('website_analyses')
       .update({ status: 'analyzing' })
       .eq('id', analysisId);
 
-    // Fetch the website content
     let htmlContent = '';
     let fetchError = null;
     try {
@@ -71,7 +69,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Perform analysis
     const structuredDataAnalysis = analyzeStructuredData(htmlContent);
     const mobileFriendlyAnalysis = analyzeMobileFriendly(htmlContent);
     const accessibilityAnalysis = analyzeAccessibility(htmlContent);
@@ -88,7 +85,6 @@ Deno.serve(async (req: Request) => {
         privacyAnalysis.score) / 6
     );
 
-    // Generate prioritized recommendations
     const recommendations = generateRecommendations({
       structuredData: structuredDataAnalysis,
       mobileFriendly: mobileFriendlyAnalysis,
@@ -98,7 +94,6 @@ Deno.serve(async (req: Request) => {
       privacy: privacyAnalysis,
     });
 
-    // Update the analysis with results
     await supabase
       .from('website_analyses')
       .update({
@@ -137,7 +132,6 @@ function analyzeStructuredData(html: string): AnalysisResult {
   const findings: string[] = [];
   let score = 0;
 
-  // Check for JSON-LD
   const jsonLdMatches = html.match(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
   if (jsonLdMatches && jsonLdMatches.length > 0) {
     score += 40;
@@ -146,7 +140,6 @@ function analyzeStructuredData(html: string): AnalysisResult {
     findings.push('No JSON-LD structured data found');
   }
 
-  // Check for Open Graph
   const ogTags = html.match(/<meta[^>]*property=["']og:[^"']*["'][^>]*>/gi);
   if (ogTags && ogTags.length > 0) {
     score += 30;
@@ -155,7 +148,6 @@ function analyzeStructuredData(html: string): AnalysisResult {
     findings.push('No Open Graph tags found');
   }
 
-  // Check for Twitter Cards
   const twitterTags = html.match(/<meta[^>]*name=["']twitter:[^"']*["'][^>]*>/gi);
   if (twitterTags && twitterTags.length > 0) {
     score += 30;
@@ -179,7 +171,6 @@ function analyzeMobileFriendly(html: string): AnalysisResult {
   const findings: string[] = [];
   let score = 0;
 
-  // Check for viewport meta tag
   const viewportTag = html.match(/<meta[^>]*name=["']viewport["'][^>]*>/i);
   if (viewportTag) {
     score += 40;
@@ -188,7 +179,6 @@ function analyzeMobileFriendly(html: string): AnalysisResult {
     findings.push('Missing viewport meta tag');
   }
 
-  // Check for responsive images
   const responsiveImages = html.match(/<img[^>]*srcset=[^>]*>/gi);
   if (responsiveImages && responsiveImages.length > 0) {
     score += 30;
@@ -197,7 +187,6 @@ function analyzeMobileFriendly(html: string): AnalysisResult {
     findings.push('No responsive images detected');
   }
 
-  // Check for media queries
   const mediaQueries = html.match(/@media[^{]*\{/gi);
   if (mediaQueries && mediaQueries.length > 0) {
     score += 30;
@@ -221,7 +210,6 @@ function analyzeAccessibility(html: string): AnalysisResult {
   const findings: string[] = [];
   let score = 0;
 
-  // Check for alt text on images
   const images = html.match(/<img[^>]*>/gi) || [];
   const imagesWithAlt = html.match(/<img[^>]*alt=["'][^"']*["'][^>]*>/gi) || [];
   const altTextRatio = images.length > 0 ? imagesWithAlt.length / images.length : 0;
@@ -236,7 +224,6 @@ function analyzeAccessibility(html: string): AnalysisResult {
     findings.push(`Poor alt text coverage: ${Math.round(altTextRatio * 100)}%`);
   }
 
-  // Check for ARIA landmarks
   const ariaLandmarks = html.match(/role=["'](main|navigation|banner|complementary|contentinfo)["']/gi);
   if (ariaLandmarks && ariaLandmarks.length > 0) {
     score += 25;
@@ -245,7 +232,6 @@ function analyzeAccessibility(html: string): AnalysisResult {
     findings.push('No ARIA landmarks found');
   }
 
-  // Check for semantic HTML5 elements
   const semanticElements = html.match(/<(header|nav|main|article|section|aside|footer)[^>]*>/gi);
   if (semanticElements && semanticElements.length >= 3) {
     score += 40;
@@ -274,7 +260,6 @@ function analyzeContentQuality(html: string): AnalysisResult {
   const findings: string[] = [];
   let score = 0;
 
-  // Check for heading structure
   const h1Tags = html.match(/<h1[^>]*>/gi);
   if (h1Tags && h1Tags.length === 1) {
     score += 30;
@@ -285,7 +270,6 @@ function analyzeContentQuality(html: string): AnalysisResult {
     findings.push('No H1 tag found');
   }
 
-  // Check for heading hierarchy
   const headings = html.match(/<h[1-6][^>]*>/gi);
   if (headings && headings.length >= 3) {
     score += 30;
@@ -294,7 +278,6 @@ function analyzeContentQuality(html: string): AnalysisResult {
     findings.push('Limited heading structure');
   }
 
-  // Check content length (approximate)
   const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
   const bodyContent = bodyMatch ? bodyMatch[1] : html;
   const textContent = bodyContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -325,7 +308,6 @@ function analyzeTechnicalSEO(html: string, url: string): AnalysisResult {
   const findings: string[] = [];
   let score = 0;
 
-  // Check for HTTPS
   if (url.startsWith('https://')) {
     score += 25;
     findings.push('Site uses HTTPS');
@@ -333,7 +315,6 @@ function analyzeTechnicalSEO(html: string, url: string): AnalysisResult {
     findings.push('Site does not use HTTPS');
   }
 
-  // Check for meta description
   const metaDescription = html.match(/<meta[^>]*name=["']description["'][^>]*>/i);
   if (metaDescription) {
     score += 25;
@@ -342,7 +323,6 @@ function analyzeTechnicalSEO(html: string, url: string): AnalysisResult {
     findings.push('Missing meta description tag');
   }
 
-  // Check for title tag
   const titleTag = html.match(/<title[^>]*>([^<]*)<\/title>/i);
   if (titleTag && titleTag[1].trim().length > 0) {
     score += 25;
@@ -351,7 +331,6 @@ function analyzeTechnicalSEO(html: string, url: string): AnalysisResult {
     findings.push('Missing or empty title tag');
   }
 
-  // Check for canonical URL
   const canonicalTag = html.match(/<link[^>]*rel=["']canonical["'][^>]*>/i);
   if (canonicalTag) {
     score += 25;
@@ -376,7 +355,6 @@ function analyzePrivacy(html: string): AnalysisResult {
   const findings: string[] = [];
   let score = 0;
 
-  // Check for privacy policy link
   const privacyPolicyLink = html.match(/href=["'][^"']*privacy[^"']*["']/i);
   if (privacyPolicyLink) {
     score += 40;
@@ -385,7 +363,6 @@ function analyzePrivacy(html: string): AnalysisResult {
     findings.push('No privacy policy link detected');
   }
 
-  // Check for cookie consent
   const cookieConsent = html.match(/cookie|consent/gi);
   if (cookieConsent && cookieConsent.length > 3) {
     score += 30;
@@ -394,7 +371,6 @@ function analyzePrivacy(html: string): AnalysisResult {
     findings.push('No cookie consent mechanism found');
   }
 
-  // Check for GDPR-related terms
   const gdprTerms = html.match(/GDPR|General Data Protection|data protection/gi);
   if (gdprTerms) {
     score += 30;
@@ -417,7 +393,6 @@ function analyzePrivacy(html: string): AnalysisResult {
 function generateRecommendations(analyses: Record<string, AnalysisResult>) {
   const recommendations: Array<{ priority: string; category: string; message: string }> = [];
 
-  // Critical recommendations (score < 30)
   if (analyses.structuredData.score < 30) {
     recommendations.push({
       priority: 'critical',
@@ -442,7 +417,6 @@ function generateRecommendations(analyses: Record<string, AnalysisResult>) {
     });
   }
 
-  // High priority recommendations (score 30-60)
   if (analyses.mobileFriendly.score >= 30 && analyses.mobileFriendly.score < 60) {
     recommendations.push({
       priority: 'high',
@@ -467,7 +441,6 @@ function generateRecommendations(analyses: Record<string, AnalysisResult>) {
     });
   }
 
-  // Medium priority recommendations (score 60-80)
   if (analyses.structuredData.score >= 60 && analyses.structuredData.score < 80) {
     recommendations.push({
       priority: 'medium',
@@ -484,7 +457,6 @@ function generateRecommendations(analyses: Record<string, AnalysisResult>) {
     });
   }
 
-  // If everything is good
   if (Object.values(analyses).every(a => a.score >= 80)) {
     recommendations.push({
       priority: 'low',
