@@ -37,16 +37,39 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const googleApiKey = Deno.env.get("GOOGLE_PAGESPEED_API_KEY") || "AIzaSyBsM4_t4zbFkKr161mbrDeuBGwLIfFBNQ4";
+    console.log(`Analyzing performance for: ${url}`);
+
+    const googleApiKey = Deno.env.get("GOOGLE_PAGESPEED_API_KEY");
+    
+    if (!googleApiKey) {
+      console.error("GOOGLE_PAGESPEED_API_KEY environment variable is not set");
+      return new Response(
+        JSON.stringify({ 
+          error: "Google PageSpeed API key is not configured. Please contact support."
+        }),
+        {
+          status: 503,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
     const pageSpeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo&key=${googleApiKey}`;
 
+    console.log('Fetching PageSpeed Insights data...');
     const pageSpeedResponse = await fetch(pageSpeedUrl);
 
     if (!pageSpeedResponse.ok) {
-      throw new Error("Failed to fetch PageSpeed Insights data");
+      const errorText = await pageSpeedResponse.text();
+      console.error('PageSpeed API error:', errorText);
+      throw new Error(`PageSpeed API error: ${pageSpeedResponse.status} - ${errorText}`);
     }
 
     const data = await pageSpeedResponse.json();
+
+    if (!data.lighthouseResult) {
+      throw new Error('Invalid response from PageSpeed API: missing lighthouseResult');
+    }
 
     const lighthouseResult = data.lighthouseResult;
     const categories = lighthouseResult.categories;
@@ -98,6 +121,7 @@ Deno.serve(async (req: Request) => {
       originLoadingExperience: data.originLoadingExperience || {},
     };
 
+    console.log('Updating database with performance metrics...');
     const { error: updateError } = await supabase
       .from("website_analyses")
       .update({
@@ -110,9 +134,11 @@ Deno.serve(async (req: Request) => {
       .eq("id", analysisId);
 
     if (updateError) {
+      console.error('Database update error:', updateError);
       throw updateError;
     }
 
+    console.log('Performance analysis completed successfully');
     return new Response(
       JSON.stringify({
         success: true,
@@ -130,6 +156,7 @@ Deno.serve(async (req: Request) => {
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Unknown error occurred",
+        details: error instanceof Error ? error.stack : undefined,
       }),
       {
         status: 500,
