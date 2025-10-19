@@ -172,6 +172,8 @@ export function PricingPage() {
   };
 
   const isCurrentPlan = (tier: string) => {
+    if (!user) return false;
+    if (tier === 'free' && (!premiumUser || premiumUser?.subscription_tier === 'free')) return true;
     return premiumUser?.subscription_tier === tier;
   };
 
