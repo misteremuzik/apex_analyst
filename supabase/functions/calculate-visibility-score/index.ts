@@ -179,7 +179,7 @@ function analyzeAEOStructuredData(html: string, schemas: string[], issues: strin
 function analyzeSnippetOptimization(html: string, issues: string[]): number {
   let score = 0;
 
-  const metaDesc = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["\']/i);
+  const metaDesc = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["']/i);
   if (metaDesc && metaDesc[1]) {
     const descLength = metaDesc[1].length;
     if (descLength >= 120 && descLength <= 160) {
@@ -223,7 +223,7 @@ function analyzeSnippetOptimization(html: string, issues: string[]): number {
 function analyzeCrawlability(html: string, url: string, issues: string[]): number {
   let score = 10;
 
-  const robotsMetaBlock = html.match(/<meta[^>]*name=["']robots["'][^>]*content=["']([^"']*)["\']/i);
+  const robotsMetaBlock = html.match(/<meta[^>]*name=["']robots["'][^>]*content=["']([^"']*)["']/i);
   if (robotsMetaBlock && robotsMetaBlock[1]) {
     const robotsContent = robotsMetaBlock[1].toLowerCase();
     if (robotsContent.includes('noindex') || robotsContent.includes('nofollow')) {
@@ -238,7 +238,7 @@ function analyzeCrawlability(html: string, url: string, issues: string[]): numbe
     issues.push('No sitemap reference found');
   }
 
-  const hasCanonical = html.match(/<link[^>]*rel=["']canonical["\']/i);
+  const hasCanonical = html.match(/<link[^>]*rel=["']canonical["']/i);
   if (!hasCanonical) {
     score -= 2;
     issues.push('Missing canonical URL');
@@ -351,14 +351,14 @@ function analyzeAEOTechnicalSEO(html: string, url: string, issues: string[]): nu
     issues.push('Not using HTTPS');
   }
 
-  const viewport = html.match(/<meta[^>]*name=["']viewport["\']/i);
+  const viewport = html.match(/<meta[^>]*name=["']viewport["']/i);
   if (viewport) {
     score += 2;
   } else {
     issues.push('Missing viewport meta tag');
   }
 
-  const lazyLoad = html.match(/loading=["']lazy["\']/i);
+  const lazyLoad = html.match(/loading=["']lazy["']/i);
   const asyncScripts = html.match(/<script[^>]*async/gi);
   if (lazyLoad) {
     score += 1;
