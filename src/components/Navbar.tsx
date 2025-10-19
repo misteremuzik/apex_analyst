@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { User, LogOut, Crown } from 'lucide-react';
+import { User, LogOut, Crown, Settings } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { AuthModal } from './AuthModal';
+import { AccountSettings } from './AccountSettings';
 
 interface NavbarProps {
   onLogoClick?: () => void;
@@ -12,6 +13,7 @@ export function Navbar({ onLogoClick }: NavbarProps) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
 
   const getTierLabel = () => {
     const tier = premiumUser?.subscription_tier || 'free';
@@ -90,12 +92,24 @@ export function Navbar({ onLogoClick }: NavbarProps) {
                           className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
                           onClick={() => {
                             setShowUserMenu(false);
-                            window.location.href = '/?pricing=true';
+                            setShowAccountSettings(true);
                           }}
                         >
-                          <Crown className="w-4 h-4 text-yellow-500" />
-                          {isPaidTier ? 'Manage Subscription' : 'Upgrade Plan'}
+                          <Settings className="w-4 h-4" />
+                          Account Settings
                         </button>
+                        {!isPaidTier && (
+                          <button
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
+                            onClick={() => {
+                              setShowUserMenu(false);
+                              window.location.href = '/?pricing=true';
+                            }}
+                          >
+                            <Crown className="w-4 h-4 text-yellow-500" />
+                            Upgrade Plan
+                          </button>
+                        )}
                         <button
                           onClick={() => {
                             signOut();
@@ -135,6 +149,11 @@ export function Navbar({ onLogoClick }: NavbarProps) {
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         initialMode={authMode}
+      />
+
+      <AccountSettings
+        isOpen={showAccountSettings}
+        onClose={() => setShowAccountSettings(false)}
       />
     </>
   );
