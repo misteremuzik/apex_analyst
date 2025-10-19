@@ -6,6 +6,7 @@ import { ChatAssistant } from './ChatAssistant';
 import { ConsultationAd } from './ConsultationAd';
 import { PremiumFeatureGate } from './PremiumFeatureGate';
 import { PerformanceMetrics } from './PerformanceMetrics';
+import VisibilityScore from './VisibilityScore';
 
 interface ResultsViewProps {
   analysis: WebsiteAnalysis;
@@ -112,6 +113,35 @@ export function ResultsView({ analysis, onReset }: ResultsViewProps) {
           performanceScore={analysis.performance_score}
           performanceMetrics={analysis.performance_metrics}
         />
+      </PremiumFeatureGate>
+
+      <PremiumFeatureGate
+        feature="performance_metrics"
+        requiredTier="starter"
+        featureName="AI Visibility Score"
+        description="Advanced Answer Engine Optimization (AEO) metrics showing how well your content performs across AI search platforms"
+      >
+        <div className="bg-white rounded-2xl border border-gray-200 p-8">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">AI Visibility Score</h2>
+            <p className="text-sm text-gray-600">
+              Comprehensive metrics for Answer Engine Optimization (AEO) performance
+            </p>
+          </div>
+          <VisibilityScore
+            aeoOverallScore={analysis.aeo_overall_score || 0}
+            structuredDataScore={analysis.structured_data_score}
+            snippetOptimizationScore={analysis.snippet_optimization_score || 0}
+            crawlabilityScore={analysis.crawlability_score || 0}
+            featuredSnippetReadyScore={analysis.featured_snippet_ready_score || 0}
+            contentQualityScore={analysis.content_quality_score}
+            technicalSeoScore={analysis.technical_seo_score}
+            pagesAnalyzed={analysis.pages_analyzed || 1}
+            aeoSchemasCount={analysis.aeo_schemas_count || 0}
+            totalIssues={analysis.total_issues || 0}
+            aiModelAccess={analysis.ai_model_access || '0/3'}
+          />
+        </div>
       </PremiumFeatureGate>
 
       <PremiumFeatureGate
