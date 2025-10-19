@@ -38,12 +38,19 @@ export function PerformanceMetrics({
       });
 
       if (!response.ok) {
-        throw new Error('Failed to analyze performance');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `Failed to analyze performance: ${response.status}`);
       }
 
       const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
       setMetrics(data.performanceMetrics);
     } catch (err) {
+      console.error('Performance analysis error:', err);
       setError(err instanceof Error ? err.message : 'Failed to analyze performance');
     } finally {
       setIsAnalyzing(false);
