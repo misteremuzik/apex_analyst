@@ -39,7 +39,7 @@ Deno.serve(async (req: Request) => {
 
     console.log(`Analyzing performance for: ${url}`);
 
-    const googleApiKey = Deno.env.get("GOOGLE_PAGESPEED_API_KEY");
+    const googleApiKey = Deno.env.get("GOOGLE_PAGESPEED_API_KEY")?.trim();
     
     if (!googleApiKey) {
       console.error("GOOGLE_PAGESPEED_API_KEY environment variable is not set");
@@ -54,6 +54,9 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    console.log(`API key length: ${googleApiKey.length}`);
+    console.log(`API key first 10 chars: ${googleApiKey.substring(0, 10)}...`);
+
     const pageSpeedUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo&key=${googleApiKey}`;
 
     console.log('Fetching PageSpeed Insights data...');
@@ -62,6 +65,7 @@ Deno.serve(async (req: Request) => {
     if (!pageSpeedResponse.ok) {
       const errorText = await pageSpeedResponse.text();
       console.error('PageSpeed API error:', errorText);
+      console.error('Response status:', pageSpeedResponse.status);
       throw new Error(`PageSpeed API error: ${pageSpeedResponse.status} - ${errorText}`);
     }
 
