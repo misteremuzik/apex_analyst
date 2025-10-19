@@ -3,6 +3,8 @@ import { supabase, WebsiteAnalysis } from './lib/supabase';
 import { ResultsView } from './components/ResultsView';
 import { LandingPage } from './components/LandingPage';
 import { PricingPage } from './components/PricingPage';
+import { SuccessPage } from './components/SuccessPage';
+import { CancelPage } from './components/CancelPage';
 import { Navbar } from './components/Navbar';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from './contexts/AuthContext';
@@ -13,6 +15,8 @@ function App() {
   const [analysis, setAnalysis] = useState<WebsiteAnalysis | null>(null);
   const [error, setError] = useState<string>('');
   const [showPricing, setShowPricing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showCancel, setShowCancel] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -20,7 +24,12 @@ function App() {
       setShowPricing(true);
     }
     if (params.get('success') === 'true') {
+      setShowSuccess(true);
       setError('');
+      setShowPricing(false);
+    }
+    if (params.get('canceled') === 'true') {
+      setShowCancel(true);
       setShowPricing(false);
     }
   }, []);
@@ -140,6 +149,14 @@ function App() {
     setAnalysis(null);
     setError('');
   };
+
+  if (showSuccess) {
+    return <SuccessPage />;
+  }
+
+  if (showCancel) {
+    return <CancelPage />;
+  }
 
   return (
     <div className="min-h-screen bg-white">

@@ -29,6 +29,7 @@ interface AuthContextType {
   isEnterprise: boolean;
   hasFeatureAccess: (feature: string) => boolean;
   canAnalyze: () => { allowed: boolean; reason?: string };
+  refreshPremiumUser: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -126,6 +127,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const refreshPremiumUser = async () => {
+    if (user) {
+      await fetchPremiumUser(user.id);
+    }
+  };
+
   const isPremium = premiumUser?.subscription_tier === 'premium';
   const isFree = premiumUser?.subscription_tier === 'free' || !premiumUser;
   const isStarter = premiumUser?.subscription_tier === 'starter';
@@ -194,6 +201,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isEnterprise,
         hasFeatureAccess,
         canAnalyze,
+        refreshPremiumUser,
         signUp,
         signIn,
         signOut,
